@@ -1,12 +1,21 @@
 package com.wipro.workdir.sftp_local_file.service;
 
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Service;
 
+import com.wipro.workdir.sftp_local_file.config.FileProperties;
 import com.wipro.workdir.sftp_local_file.exception.ServiceException;
 import com.wipro.workdir.sftp_local_file.model.SftpFile;
 
+@Service
 public class FileService {
+	@Autowired
+	private FileProperties properties;
+	
+	@Autowired
+	private SftpFile file;
 
 	public boolean isValidRequest(SftpFile sftpFile) {
 		if(!Base64.isBase64(sftpFile.getContent())) {
@@ -16,6 +25,10 @@ public class FileService {
 	}
 
 	public boolean saveFile(SftpFile sftpFile) {
+		boolean actionStatus = false;
+		String localFilePath = properties.getTempPath() + file.getFileName();
+		
+		
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -1,5 +1,8 @@
 package com.wipro.workdir.sftp_local_file.service;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,9 +31,20 @@ public class FileService {
 		boolean actionStatus = false;
 		String localFilePath = properties.getTempPath() + file.getFileName();
 		
-		
-		// TODO Auto-generated method stub
-		return false;
+		try {
+			boolean isFileCreated = createFile(localFilePath, sftpFile);
+			actionStatus = true;
+		} catch (Exception e) {
+			throw new ServiceException(HttpStatus.INTERNAL_SERVER_ERROR, HttpStatus.INTERNAL_SERVER_ERROR.value(), e.getMessage(),e);
+		}
+		return actionStatus;
+	}
+
+	private boolean createFile(String localFilePath, SftpFile sftpFile) throws IOException{
+		try (FileWriter writer = new FileWriter(localFilePath)){
+			writer.write(sftpFile.getContent()); 
+		} 
+		return true;
 	}
 
 }
